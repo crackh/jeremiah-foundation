@@ -1,17 +1,12 @@
-// File: app/api/volunteers/route.ts
-"use server";
-
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import nodemailer from "nodemailer";
 
-// --- Initialize Supabase client with server-side service role key ---
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // Server-only key
+  process.env.SUPABASE_SERVICE_ROLE_KEY! // secure server-side key
 );
 
-// --- Initialize Nodemailer transporter ---
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
@@ -24,21 +19,17 @@ const transporter = nodemailer.createTransport({
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    console.log("Request body:", body);
-
-    const { name, email, message } = body;
+    const { name, email, message } = await req.json();
 
     if (!name || !email) {
-      console.warn("Validation failed: missing name or email");
       return NextResponse.json(
         { success: false, error: "Name and Email are required" },
         { status: 400 }
       );
     }
 
-    // --- 1️⃣ Insert volunteer into Supabase ---
-    const { data, error: supabaseError } = await supabase
+    // 1️⃣ Insert into Supabase
+    const { data, error } = await supabase
       .from("volunteers")
       .insert([
         {
@@ -50,33 +41,30 @@ export async function POST(req: Request) {
       ])
       .select();
 
-    if (supabaseError) {
-      console.error("Supabase insert error:", supabaseError);
+    if (error) {
+      console.error("Supabase insert error:", error);
       return NextResponse.json(
-        { success: false, error: supabaseError.message },
+        { success: false, error: error.message },
         { status: 500 }
       );
     }
 
-    console.log("Supabase insert successful:", data);
-
-    // --- 2️⃣ Send notification email to org ---
+    // 2️⃣ Send notification email to organization
     let emailFailed = false;
     try {
       await transporter.sendMail({
         from: `"Jeremiah Foundation" <${process.env.SMTP_USER}>`,
-        to: process.env.ORG_EMAIL || process.env.SMTP_USER,
+        to: process.env.ORG_EMAIL || process.env.SMTP_USER, // ✅ Org inbox
         subject: "New Volunteer Signup",
         text: `New volunteer joined:
-Name: ${name}
-Email: ${email}
-Message: ${message}`,
+        Name: ${name}
+        Email: ${email}
+        Message: ${message}`,
         html: `<h3>New Volunteer Signup</h3>
-<p><b>Name:</b> ${name}</p>
-<p><b>Email:</b> ${email}</p>
-<p><b>Message:</b> ${message}</p>`,
+        <p><b>Name:</b> ${name}</p>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Message:</b> ${message}</p>`,
       });
-      console.log("Notification email sent successfully");
     } catch (mailError) {
       emailFailed = true;
       console.error("Email send error:", mailError);
@@ -84,9 +72,9 @@ Message: ${message}`,
 
     return NextResponse.json({ success: true, data, emailFailed });
   } catch (err) {
-    console.error("Unexpected API error:", err);
+    console.error("API error:", err);
     return NextResponse.json(
-      { success: false, error: "Unexpected server error" },
+      { success: false, error: "Unexpected error" },
       { status: 500 }
     );
   }
