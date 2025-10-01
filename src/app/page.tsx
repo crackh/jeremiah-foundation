@@ -108,7 +108,7 @@ export default function Home() {
           </p>
           <p className="mb-4">
             The organization supplements government efforts like Universal Primary and Secondary Education
-            programs, supporting children in Kiwulwe and Okango villages who cannot afford school supplies
+            programs, supporting children in Gudda fish landing site and Okango villages who cannot afford school supplies
             or other necessities.
           </p>
           <p className="mb-4">
