@@ -13,22 +13,45 @@ type Achievement = {
 export default function AchievementsPage() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
 
-  // Achievement data with Supabase image filenames
+  // Refined achievement data
   const achievementData: { title: string; description: string; file?: string }[] = [
-    { title: "Registered & Permitted", description: "Fully licensed by the Uganda NGO Board." },
-    { title: "Clean Water Access", description: "Drilled boreholes in Wakiso and Amuru districts; distributed Bio Sand Water Filters.", file: "water.jpg" },
-    { title: "Food Provision", description: "Provided food to the community we visited.", file: "food.jpg" },
-    { title: "Healthcare Support", description: "Facilitated successful surgeries and medical treatments.", file: "support.jpg" },
-    { title: "Education & Discipleship", description: "Provided scholastic materials, school fees support, and Bible classes.", file: "education.jpg" },
-    { title: "Women Skilling", description: "Trained women in reusable pads, poultry, shoemaking, hairdressing, making of bread(mandazi) and more.", file: "skilling.jpg" },
+    {
+      title: "Registered & Licensed",
+      description: "Received official operational permit from the Uganda NGO Board / Ministry of Internal Affairs.",
+      file: "support.jpg",
+    },
+    {
+      title: "Clean Water Access",
+      description: "Drilled boreholes in Amuru district and distributed Bio Sand Water Filters to families to fight waterborne diseases.",
+      file: "water.jpg",
+    },
+    {
+      title: "Housing & Support",
+      description: "Built homes and provided mattresses, clothes, shoes, and stockings to children in need.",
+      file: "support.jpg",
+    },
+    {
+      title: "Food & Basic Needs",
+      description: "Distributed food hampers and essential supplies to vulnerable families in multiple communities.",
+      file: "food.jpg",
+    },
+    {
+      title: "Women & Youth Skilling",
+      description: "Trained women and girls in making reusable pads, poultry keeping, shoemaking, tailoring, craft, cookery, soap making, and more.",
+      file: "skilling.jpg",
+    },
+    {
+      title: "Education & Discipleship",
+      description: "Supported children with school fees, materials, and Bible study programs; 20 people baptized and discipled.",
+      file: "education.jpg",
+    },
   ];
 
   const fetchAchievements = async () => {
     const combined: Achievement[] = achievementData.map((a) => {
       let imageUrl = "";
       if (a.file) {
-        const { data } = supabase
-          .storage
+        const { data } = supabase.storage
           .from("achievements-images")
           .getPublicUrl(a.file);
         imageUrl = data.publicUrl || "";
