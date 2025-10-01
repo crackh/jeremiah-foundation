@@ -13,19 +13,43 @@ type Challenge = {
 export default function ChallengesPage() {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
 
+  // Simplified + clear details
   const challengeData = [
-    { title: "Critical Lack of Shelter", description: "Children living in mud houses with polythene roofs.", file: "shelter.jpg" },
-    { title: "Health Crises", description: "Poor sanitation, no mosquito nets, limited access to medical care.", file: "health.jpg" },
-    { title: "Malnutrition & Hunger", description: "Children eating once a day.", file: "mulnutrition.jpg" },
-    { title: "Educational Barriers", description: "Inability to afford uniforms and materials.", file: "education.jpg" },
-    { title: "Exploitation & Abuse", description: "Young girls face sexual abuse, early pregnancy, and child marriage.", file: "exploitation.jpg" },
-    { title: "Clean Water", description: "Urgent need for clean water.", file: "water.png" },
+    {
+      title: "Lack of Decent Housing",
+      description: "Children live in mud houses with leaking roofs, no bedding, and little privacy.",
+      file: "shelter.jpg",
+    },
+    {
+      title: "Poor Health & Sanitation",
+      description: "No mosquito nets, unsafe bathrooms, and frequent outbreaks of malaria, cholera, and dysentery.",
+      file: "health.jpg",
+    },
+    {
+      title: "Hunger & Malnutrition",
+      description: "Many children eat only once a day, suffer stunted growth, and face severe malnutrition.",
+      file: "mulnutrition.jpg",
+    },
+    {
+      title: "Lack of Education",
+      description: "Poverty prevents children from accessing school, uniforms, or materials, leaving their future uncertain.",
+      file: "education.jpg",
+    },
+    {
+      title: "Abuse & Exploitation",
+      description: "Children face sexual abuse, early pregnancies, child marriages, and exposure to immorality.",
+      file: "exploitation.jpg",
+    },
+    {
+      title: "Unsafe Water",
+      description: "Families rely on contaminated lake water for drinking and washing, leading to waterborne diseases.",
+      file: "water.png",
+    },
   ];
 
   const fetchChallenges = async () => {
     const combined: Challenge[] = challengeData.map((c) => {
-      const { data } = supabase
-        .storage
+      const { data } = supabase.storage
         .from("challenges-images")
         .getPublicUrl(c.file);
       return { ...c, image: data.publicUrl };
@@ -85,7 +109,9 @@ export default function ChallengesPage() {
               />
             </div>
             <div className="p-4">
-              <h3 className="text-xl font-semibold text-red-600 mb-2">{c.title}</h3>
+              <h3 className="text-xl font-semibold text-red-600 mb-2">
+                {c.title}
+              </h3>
               <p className="text-gray-800">{c.description}</p>
             </div>
           </motion.div>
