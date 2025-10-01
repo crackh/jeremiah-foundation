@@ -2,34 +2,41 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function Home() {
   const [homeImage, setHomeImage] = useState<string>("");
   const [logoImage, setLogoImage] = useState<string>("");
+  const [educationImage, setEducationImage] = useState<string>("");
 
   const sectionVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
 
-  // Fetch home and logo images from Supabase
+  // Fetch images from Supabase
   useEffect(() => {
-    const fetchImages = () => {
-      // Home image
+    const fetchImages = async () => {
       const { data: homeData } = supabase
         .storage
         .from("home-images")
         .getPublicUrl("home.jpg");
       if (homeData?.publicUrl) setHomeImage(homeData.publicUrl);
 
-      // Logo watermark
       const { data: logoData } = supabase
         .storage
         .from("logo")
         .getPublicUrl("logo.png");
       if (logoData?.publicUrl) setLogoImage(logoData.publicUrl);
+
+      const { data: eduData } = supabase
+        .storage
+        .from("achievements-images")
+        .getPublicUrl("education.jpg");
+      if (eduData?.publicUrl) setEducationImage(eduData.publicUrl);
     };
+
     fetchImages();
   }, []);
 
@@ -40,11 +47,12 @@ export default function Home() {
       animate={{ opacity: 1, transition: { duration: 0.8 } }}
       exit={{ opacity: 0, transition: { duration: 0.5 } }}
     >
-      {/* Logo watermark for the entire page */}
+      {/* Logo watermark */}
       {logoImage && (
-        <img
+        <Image
           src={logoImage}
-          alt=" "
+          alt="Logo watermark"
+          fill
           className="absolute inset-0 w-full h-full object-contain opacity-10 pointer-events-none select-none"
         />
       )}
@@ -56,19 +64,21 @@ export default function Home() {
         initial="hidden"
         animate="visible"
       >
-        {/* Education image from achievements-images bucket */}
-        <img
-          src={supabase.storage.from("achievements-images").getPublicUrl("education.jpg").data.publicUrl}
-          alt=" "
-          className="absolute inset-0 w-full h-full object-cover object-center opacity-30"
-        />
-        
+        {educationImage && (
+          <Image
+            src={educationImage}
+            alt="Education background"
+            fill
+            className="absolute inset-0 w-full h-full object-cover object-center opacity-30"
+          />
+        )}
+
         <div className="relative z-10">
           <h1 className="text-5xl font-bold text-cyan-700">
             JEREMIAH 29:11 KIDS FOUNDATION UGANDA
           </h1>
           <p className="italic text-lg mt-4 max-w-3xl mx-auto">
-            &quot;For I know the plans I have for you,&rdquo; declares the Lord, &ldquo;plans to prosper you
+            &quot;For I know the plans I have for you,&quot; declares the Lord, &quot;plans to prosper you
             and not to harm you, plans to give you hope and a future.&quot; – Jeremiah 29:11
           </p>
           <div className="mt-8">
@@ -113,10 +123,11 @@ export default function Home() {
 
         <motion.div className="relative w-full h-100 md:h-[28rem] lg:h-[32rem]" whileHover={{ scale: 1.03 }}>
           {homeImage && (
-            <img
+            <Image
               src={homeImage}
               alt="Orphans and Vulnerable Children"
-              className="absolute inset-0 w-full h-full object-contain object-center rounded-lg shadow-md"
+              fill
+              className="rounded-lg shadow-md object-contain object-center"
             />
           )}
         </motion.div>
