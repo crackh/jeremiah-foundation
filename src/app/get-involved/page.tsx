@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function GetInvolvedPage() {
   const [name, setName] = useState("");
@@ -10,7 +10,7 @@ export default function GetInvolvedPage() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle"
   );
-  const [donationAmount, setDonationAmount] = useState<number>(0);
+  const [showBankDetails, setShowBankDetails] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,24 +39,6 @@ export default function GetInvolvedPage() {
     }
   };
 
-  const handleDonate = async (platform: string) => {
-    if (!donationAmount || donationAmount <= 0) {
-      alert("Please enter a valid donation amount.");
-      return;
-    }
-
-    const res = await fetch(
-      `/api/donate?amount=${donationAmount}&platform=${platform}`
-    );
-    const data = await res.json();
-
-    if (data.success && data.redirectUrl) {
-      window.location.href = data.redirectUrl;
-    } else {
-      alert("Donation failed. Please try again.");
-    }
-  };
-
   const sectionVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -78,10 +60,7 @@ export default function GetInvolvedPage() {
         Join Us in Making a Difference
       </motion.h2>
 
-      {/* 
-      ============================
-      Donation Section (DISABLED)
-      ============================
+      {/* Donation Section */}
       <motion.section
         className="bg-green-50 p-6 rounded-lg shadow-md text-gray-900"
         variants={sectionVariants}
@@ -91,40 +70,48 @@ export default function GetInvolvedPage() {
         <h3 className="text-2xl font-semibold mb-2 text-gray-700">Donate</h3>
         <p className="mb-4">
           Your support helps us provide shelter, education, healthcare, and food
-          to children and women in need. Enter an amount and choose your preferred platform.
+          to children and women in need.
         </p>
 
-        <input
-          type="number"
-          min={1}
-          placeholder="Enter amount (UGX)"
-          value={donationAmount}
-          onChange={(e) => setDonationAmount(Number(e.target.value))}
-          className="w-full p-3 border rounded-lg text-gray-900 placeholder-gray-500 mb-4"
-        />
+        <button
+          onClick={() => setShowBankDetails(!showBankDetails)}
+          className="w-full bg-green-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-700 transition font-semibold"
+        >
+          {showBankDetails ? "Hide Bank Details" : "Donate"}
+        </button>
 
-        <div className="flex flex-col md:flex-row gap-4">
-          <button
-            onClick={() => handleDonate("mtn")}
-            className="flex-1 bg-yellow-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-yellow-600 transition"
-          >
-            Donate via MTN
-          </button>
-          <button
-            onClick={() => handleDonate("airtel")}
-            className="flex-1 bg-red-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-red-600 transition"
-          >
-            Donate via Airtel
-          </button>
-          <button
-            onClick={() => handleDonate("paypal")}
-            className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
-          >
-            Donate via PayPal
-          </button>
-        </div>
+        <AnimatePresence>
+          {showBankDetails && (
+            <motion.div
+              className="mt-6 p-6 rounded-xl shadow-lg bg-white border border-gray-200"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.4 }}
+            >
+              <h4 className="text-xl font-bold text-gray-800 mb-4 text-center">
+                Bank Transfer Details
+              </h4>
+              <div className="space-y-3 text-gray-700">
+                <p>
+                  <span className="font-semibold">Bank Account Name:</span>{" "}
+                  Jeremiah 29:11 Kids Foundation (STANBIC BANK)
+                </p>
+                <p>
+                  <span className="font-semibold">Account Number:</span>{" "}
+                  9030025436260
+                </p>
+                <p>
+                  <span className="font-semibold">SWIFT Code:</span> SBICUGKX
+                </p>
+              </div>
+              <p className="mt-4 text-sm text-gray-500 text-center">
+                Kindly include your full name as the reference when donating.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.section>
-      */}
 
       {/* Volunteer Section */}
       <motion.section
