@@ -15,26 +15,20 @@ export default function Home() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
 
-  // Fetch images from Supabase
   useEffect(() => {
     const fetchImages = async () => {
-      const { data: homeData } = supabase
-        .storage
-        .from("home-images")
-        .getPublicUrl("home.jpg");
-      if (homeData?.publicUrl) setHomeImage(homeData.publicUrl);
+      try {
+        const homeData = supabase.storage.from("home-images").getPublicUrl("home.jpg");
+        if (homeData?.data?.publicUrl) setHomeImage(homeData.data.publicUrl);
 
-      const { data: logoData } = supabase
-        .storage
-        .from("logo")
-        .getPublicUrl("logo.png");
-      if (logoData?.publicUrl) setLogoImage(logoData.publicUrl);
+        const logoData = supabase.storage.from("logo").getPublicUrl("logo.png");
+        if (logoData?.data?.publicUrl) setLogoImage(logoData.data.publicUrl);
 
-      const { data: eduData } = supabase
-        .storage
-        .from("achievements-images")
-        .getPublicUrl("education.jpg");
-      if (eduData?.publicUrl) setEducationImage(eduData.publicUrl);
+        const eduData = supabase.storage.from("achievements-images").getPublicUrl("education.jpg");
+        if (eduData?.data?.publicUrl) setEducationImage(eduData.data.publicUrl);
+      } catch (error) {
+        console.error("Error fetching images from Supabase:", error);
+      }
     };
 
     fetchImages();
@@ -53,6 +47,7 @@ export default function Home() {
           src={logoImage}
           alt="Logo watermark"
           fill
+          unoptimized
           className="absolute inset-0 w-full h-full object-contain opacity-10 pointer-events-none select-none"
         />
       )}
@@ -69,6 +64,7 @@ export default function Home() {
             src={educationImage}
             alt="Education background"
             fill
+            unoptimized
             className="absolute inset-0 w-full h-full object-cover object-center opacity-30"
           />
         )}
@@ -127,13 +123,14 @@ export default function Home() {
               src={homeImage}
               alt="Orphans and Vulnerable Children"
               fill
+              unoptimized
               className="rounded-lg shadow-md object-contain object-center"
             />
           )}
         </motion.div>
       </motion.section>
 
-      {/* Call to Action Section */}
+      {/* Call to Action */}
       <motion.section
         className="text-center py-12 bg-cyan-100 rounded-lg shadow-md px-6"
         variants={sectionVariants}
