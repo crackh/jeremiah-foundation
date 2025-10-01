@@ -56,7 +56,6 @@ export default function Home() {
         initial="hidden"
         animate="visible"
       >
-        {/* Education image from achievements-images bucket */}
         <img
           src={supabase.storage.from("achievements-images").getPublicUrl("education.jpg").data.publicUrl}
           alt=" "
@@ -67,7 +66,7 @@ export default function Home() {
           <h1 className="text-5xl font-bold text-cyan-700">
             JEREMIAH 29:11 KIDS FOUNDATION UGANDA
           </h1>
-          <p className="italic text-lg mt-4 max-w-3xl mx-auto">
+          <p className="italic text-lg mt-4 max-w-3xl mx-auto text-justify">
             "For I know the plans I have for you,” declares the Lord, “plans to prosper you
             and not to harm you, plans to give you hope and a future." – Jeremiah 29:11
           </p>
@@ -84,34 +83,34 @@ export default function Home() {
 
       {/* Background Section */}
       <motion.section
-        className="grid md:grid-cols-2 gap-8 items-center px-6"
+        className="grid md:grid-cols-2 gap-8 items-center px-4 md:px-6"
         variants={sectionVariants}
         initial="hidden"
         animate="visible"
       >
-        <div>
+        <div className="text-justify">
           <h2 className="text-3xl font-bold text-cyan-700 mb-4">Background</h2>
-          <p className="mb-4 text-justify">
+          <p className="mb-4">
             In Uganda, most orphaned children are a result of AIDS/HIV. Moreover, rampant poverty
             prevents these orphans from caring for themselves. Elderly caretakers, often above 70 years,
             struggle to provide for them.
           </p>
-          <p className="mb-4 text-justify">
+          <p className="mb-4">
             Jeremiah 29:11 Kids Foundation Uganda Limited was founded to respond to these challenges,
             offering hope, education, shelter, medical care, and basic needs to orphaned and vulnerable children.
           </p>
-          <p className="mb-4 text-justify">
+          <p className="mb-4">
             The organization supplements government efforts like Universal Primary and Secondary Education
             programs, supporting children in Kiwulwe and Okango villages who cannot afford school supplies
             or other necessities.
           </p>
-          <p className="mb-4 text-justify">
+          <p className="mb-4">
             Today, it has registered 328 orphans, with a higher percentage of girls, in Wakiso District,
             and continues to work hand-in-hand with other NGOs to improve their lives.
           </p>
         </div>
 
-        <motion.div className="relative w-full h-100 md:h-[28rem] lg:h-[32rem]" whileHover={{ scale: 1.03 }}>
+        <motion.div className="relative w-full h-80 md:h-[28rem] lg:h-[32rem]" whileHover={{ scale: 1.03 }}>
           {homeImage && (
             <img
               src={homeImage}
@@ -132,7 +131,7 @@ export default function Home() {
         <h3 className="text-3xl font-semibold text-cyan-700 mb-4">
           Help Us Make a Difference
         </h3>
-        <p className="mb-6">
+        <p className="mb-6 text-justify max-w-3xl mx-auto">
           Your support enables us to provide shelter, education, medical care, and food to children and women in need.
         </p>
         <a
