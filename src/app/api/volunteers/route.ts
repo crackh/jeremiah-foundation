@@ -7,15 +7,25 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY! // secure server-side key
 );
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: process.env.SMTP_SECURE === "true",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+// ✅ Create transporter only if SMTP config exists
+let transporter: nodemailer.Transporter | null = null;
+
+if (
+  process.env.SMTP_HOST &&
+  process.env.SMTP_PORT &&
+  process.env.SMTP_USER &&
+  process.env.SMTP_PASS
+) {
+  transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: process.env.SMTP_SECURE === "true", // true for 465
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+}
 
 export async function POST(req: Request) {
   try {
@@ -49,25 +59,33 @@ export async function POST(req: Request) {
       );
     }
 
-    // 2️⃣ Send notification email to organization
+    // 2️⃣ Attempt to send email if transporter is available
     let emailFailed = false;
-    try {
-      await transporter.sendMail({
-        from: `"Jeremiah Foundation" <${process.env.SMTP_USER}>`,
-        to: process.env.ORG_EMAIL || process.env.SMTP_USER, // ✅ Org inbox
-        subject: "New Volunteer Signup",
-        text: `New volunteer joined:
-        Name: ${name}
-        Email: ${email}
-        Message: ${message}`,
-        html: `<h3>New Volunteer Signup</h3>
-        <p><b>Name:</b> ${name}</p>
-        <p><b>Email:</b> ${email}</p>
-        <p><b>Message:</b> ${message}</p>`,
-      });
-    } catch (mailError) {
+
+    if (transporter) {
+      try {
+        await transporter.sendMail({
+          from: `"Jeremiah Foundation" <${process.env.SMTP_USER}>`,
+          to: process.env.ORG_EMAIL || process.env.SMTP_USER,
+          subject: "New Volunteer Signup",
+          text: `New volunteer joined:
+          Name: ${name}
+          Email: ${email}
+          Message: ${message}`,
+          html: `<h3>New Volunteer Signup</h3>
+          <p><b>Name:</b> ${name}</p>
+          <p><b>Email:</b> ${email}</p>
+          <p><b>Message:</b> ${message}</p>`,
+        });
+      } catch (mailError) {
+        emailFailed = true;
+        console.error("Email send error:", mailError);
+      }
+    } else {
       emailFailed = true;
-      console.error("Email send error:", mailError);
+      console.warn(
+        "⚠️ SMTP not configured: skipping email send. Check Vercel environment variables."
+      );
     }
 
     return NextResponse.json({ success: true, data, emailFailed });
