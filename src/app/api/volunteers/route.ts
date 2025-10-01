@@ -4,7 +4,7 @@ import nodemailer from "nodemailer";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // secure server-side key
+  process.env.SUPABASE_SERVICE_ROLE_KEY! // server-only
 );
 
 const transporter = nodemailer.createTransport({
@@ -22,48 +22,29 @@ export async function POST(req: Request) {
     const { name, email, message } = await req.json();
 
     if (!name || !email) {
-      return NextResponse.json(
-        { success: false, error: "Name and Email are required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "Name and Email are required" }, { status: 400 });
     }
 
-    // 1️⃣ Insert into Supabase
+    // Insert volunteer
     const { data, error } = await supabase
       .from("volunteers")
-      .insert([
-        {
-          full_name: name,
-          email,
-          message,
-          joined_at: new Date().toISOString(),
-        },
-      ])
+      .insert([{ full_name: name, email, message, joined_at: new Date().toISOString() }])
       .select();
 
     if (error) {
       console.error("Supabase insert error:", error);
-      return NextResponse.json(
-        { success: false, error: error.message },
-        { status: 500 }
-      );
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
-    // 2️⃣ Send notification email to organization
+    // Send notification email
     let emailFailed = false;
     try {
       await transporter.sendMail({
         from: `"Jeremiah Foundation" <${process.env.SMTP_USER}>`,
-        to: process.env.ORG_EMAIL || process.env.SMTP_USER, // ✅ Org inbox
+        to: process.env.ORG_EMAIL || process.env.SMTP_USER,
         subject: "New Volunteer Signup",
-        text: `New volunteer joined:
-        Name: ${name}
-        Email: ${email}
-        Message: ${message}`,
-        html: `<h3>New Volunteer Signup</h3>
-        <p><b>Name:</b> ${name}</p>
-        <p><b>Email:</b> ${email}</p>
-        <p><b>Message:</b> ${message}</p>`,
+        text: `New volunteer joined:\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
+        html: `<h3>New Volunteer Signup</h3><p><b>Name:</b> ${name}</p><p><b>Email:</b> ${email}</p><p><b>Message:</b> ${message}</p>`,
       });
     } catch (mailError) {
       emailFailed = true;
@@ -73,9 +54,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, data, emailFailed });
   } catch (err) {
     console.error("API error:", err);
-    return NextResponse.json(
-      { success: false, error: "Unexpected error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Unexpected error" }, { status: 500 });
   }
 }
