@@ -15,11 +15,17 @@ interface Status {
 }
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState<FormData>({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    message: "",
+  });
   const [status, setStatus] = useState<Status>({ message: "" });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,7 +39,11 @@ export default function ContactPage() {
         body: JSON.stringify(formData),
       });
 
-      const data: { message?: string; error?: string; emailFailed?: boolean } = await res.json();
+      const data: {
+        message?: string;
+        error?: string;
+        emailFailed?: boolean;
+      } = await res.json();
 
       if (res.ok) {
         setFormData({ name: "", email: "", message: "" });
@@ -42,7 +52,10 @@ export default function ContactPage() {
           : data.message!;
         setStatus({ message: msg });
       } else {
-        setStatus({ message: data.error || "Failed to send message", isError: true });
+        setStatus({
+          message: data.error || "Failed to send message",
+          isError: true,
+        });
       }
     } catch (err) {
       console.error(err);
@@ -79,11 +92,9 @@ export default function ContactPage() {
         animate="visible"
       >
         <h3 className="text-2xl font-semibold mb-4 text-gray-700">Reach Out</h3>
-        <p className="mb-2">
-          Email: <span className="font-medium">jeremiahkidsfoundation@gmail.com / dianamwine@gmail.com</span>
-        </p>
-        <p className="mb-2">
-          Phone/WhatsApp: <span className="font-medium">+256 - 702 - 774 - 093</span>
+        <p className="text-gray-700">
+          We value hearing from you. Please use the form below to share your
+          message, and our team will get back to you as soon as possible.
         </p>
       </motion.section>
 
@@ -94,7 +105,9 @@ export default function ContactPage() {
         initial="hidden"
         animate="visible"
       >
-        <h3 className="text-2xl font-semibold mb-4 text-gray-700">Send Us a Message</h3>
+        <h3 className="text-2xl font-semibold mb-4 text-gray-700">
+          Send Us a Message
+        </h3>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             name="name"
@@ -133,7 +146,9 @@ export default function ContactPage() {
         </form>
         {status.message && (
           <p
-            className={`mt-4 text-center font-medium ${status.isError ? "text-red-600" : "text-green-700"}`}
+            className={`mt-4 text-center font-medium ${
+              status.isError ? "text-red-600" : "text-green-700"
+            }`}
           >
             {status.message}
           </p>
