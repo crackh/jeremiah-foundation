@@ -68,8 +68,8 @@ export default function Home() {
             JEREMIAH 29:11 KIDS FOUNDATION UGANDA
           </h1>
           <p className="italic text-lg mt-4 max-w-3xl mx-auto">
-            "For I know the plans I have for you,” declares the Lord, “plans to prosper you
-            and not to harm you, plans to give you hope and a future." – Jeremiah 29:11
+            &quot;For I know the plans I have for you,&rdquo; declares the Lord, &ldquo;plans to prosper you
+            and not to harm you, plans to give you hope and a future.&quot; – Jeremiah 29:11
           </p>
           <div className="mt-8">
             <a
