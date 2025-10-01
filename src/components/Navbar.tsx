@@ -54,7 +54,7 @@ export default function Navbar() {
             ) : (
               <div className="h-12 w-12 bg-white rounded-full animate-pulse" /> // placeholder
             )}
-            <span className="text-lg sm:text-xl md:text-2xl font-bold">Jeremiah 29:11 Kids Foundation Uganda</span>
+            <span className="text-lg sm:text-l md:text-2l font-bold">Jeremiah 29:11 Kids Foundation Uganda</span>
           </Link>
 
           {/* Desktop Menu */}
