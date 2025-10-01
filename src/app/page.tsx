@@ -112,7 +112,7 @@ export default function Home() {
             or other necessities.
           </p>
           <p className="mb-4">
-            Today, it has registered 328 orphans, with a higher percentage of girls, in Wakiso District,
+            Today, it has registered 328 orphans, with a higher percentage of girls, in Wakiso District and Northern Uganda,
             and continues to work hand-in-hand with other NGOs to improve their lives.
           </p>
         </div>
