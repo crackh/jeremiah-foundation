@@ -75,7 +75,7 @@ export default function GetInvolvedPage() {
 
         <button
           onClick={() => setShowBankDetails(!showBankDetails)}
-          className="w-full bg-green-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-700 transition font-semibold"
+          className="w-full bg-gray-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-gray-700 transition font-semibold"
         >
           {showBankDetails ? "Hide Bank Details" : "Donate"}
         </button>
