@@ -66,7 +66,7 @@ export default function Home() {
           <h1 className="text-5xl font-bold text-cyan-700">
             JEREMIAH 29:11 KIDS FOUNDATION UGANDA
           </h1>
-          <p className="italic text-lg mt-4 max-w-3xl mx-auto text-justify">
+          <p className="italic text-lg mt-4 max-w-3xl mx-auto">
             "For I know the plans I have for you,” declares the Lord, “plans to prosper you
             and not to harm you, plans to give you hope and a future." – Jeremiah 29:11
           </p>
@@ -88,7 +88,7 @@ export default function Home() {
         initial="hidden"
         animate="visible"
       >
-        <div className="text-justify">
+        <div>
           <h2 className="text-3xl font-bold text-cyan-700 mb-4">Background</h2>
           <p className="mb-4">
             In Uganda, most orphaned children are a result of AIDS/HIV. Moreover, rampant poverty
@@ -101,11 +101,11 @@ export default function Home() {
           </p>
           <p className="mb-4">
             The organization supplements government efforts like Universal Primary and Secondary Education
-            programs, supporting children in Kiwulwe and Okango villages who cannot afford school supplies
+            programs, supporting children in Gudda fish landing site and Okango villages who cannot afford school supplies
             or other necessities.
           </p>
           <p className="mb-4">
-            Today, it has registered 328 orphans, with a higher percentage of girls, in Wakiso District,
+            Today, it has registered 328 orphans, with a higher percentage of girls, in Wakiso District and Northan Uganda,
             and continues to work hand-in-hand with other NGOs to improve their lives.
           </p>
         </div>
@@ -131,7 +131,7 @@ export default function Home() {
         <h3 className="text-3xl font-semibold text-cyan-700 mb-4">
           Help Us Make a Difference
         </h3>
-        <p className="mb-6 text-justify max-w-3xl mx-auto">
+        <p className="mb-6 max-w-3xl mx-auto">
           Your support enables us to provide shelter, education, medical care, and food to children and women in need.
         </p>
         <a
