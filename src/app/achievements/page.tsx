@@ -28,7 +28,7 @@ export default function AchievementsPage() {
     {
       title: "Housing & Support",
       description: "Built homes and provided mattresses, clothes, shoes, and stockings to children in need.",
-      file: "support.jpg",
+      file: "give.jpg",
     },
     {
       title: "Food & Basic Needs",
