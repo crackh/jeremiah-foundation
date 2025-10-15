@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Building Hope, Transforming Communities",
   icons: {
     icon: [
-      { url: "/jkf.png", type: "image/png" },
+      { url: "/jkf.png", type: "image/png" }, // favicon
     ],
   },
 };
@@ -20,6 +20,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Fallback in case metadata icons don’t render */}
+        <link rel="icon" href="/jkf.png" type="image/png" />
+      </head>
       <body className="bg-gray-50 text-gray-800">
         <Navbar />
         <main className="min-h-screen max-w-7xl mx-auto px-4 py-6">
