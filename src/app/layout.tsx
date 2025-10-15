@@ -7,7 +7,9 @@ export const metadata: Metadata = {
   title: "Jeremiah 29:11 Kids Foundation Uganda",
   description: "Building Hope, Transforming Communities",
   icons: {
-    icon: "/jkf.png", // 👈 This line sets jkf.png as the favicon
+    icon: [
+      { url: "/jkf.png", type: "image/png" },
+    ],
   },
 };
 
