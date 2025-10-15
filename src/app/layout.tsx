@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Building Hope, Transforming Communities",
   icons: {
     icon: [
-      { url: "/jkf.png", type: "image/png" }, // favicon
+      { url: "/jkf.png", type: "image/png" },
     ],
   },
 };
